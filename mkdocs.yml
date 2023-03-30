@@ -50,5 +50,6 @@ nav:
     - Report Issues: https://github.com/hwilli72/maplab/issues
     - Examples:
         - examples/intro.ipynb
+        - examples/ipyleaflet.ipynb
     - API Reference:
           - maplab module: maplab.md
