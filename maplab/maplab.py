@@ -2,6 +2,12 @@
 
 import string
 import random
+import ipyleaflet
+
+class Map(ipyleaflet.Map):
+
+    def __init__(self, center, zoom, **kwargs) -> None:
+        super().__init__(center=center, zoom=zoom, **kwargs)
 
 def random_string(length, upper=False, digits=False):
     """Generates a random string of a given length.
