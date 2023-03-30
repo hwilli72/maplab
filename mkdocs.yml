@@ -49,6 +49,6 @@ nav:
     - Changelog: changelog.md
     - Report Issues: https://github.com/hwilli72/maplab/issues
     - Examples:
-        -examples/intro.ipynb
+        - examples/intro.ipynb
     - API Reference:
           - maplab module: maplab.md
