@@ -51,5 +51,6 @@ nav:
     - Examples:
         - examples/intro.ipynb
         - examples/ipyleaflet.ipynb
+        - examples/maplab.ipynb
     - API Reference:
           - maplab module: maplab.md
