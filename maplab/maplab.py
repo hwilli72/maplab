@@ -23,7 +23,7 @@ class Map(ipyleaflet.Map):
             """Adds a search control to the map.
 
             Args:
-            self: The map.
+                self: The map.
                 position (str, optional): The position of the search control. Defaults to "topleft".
                 kwargs: Keyword arguments to pass to the search control.
 
