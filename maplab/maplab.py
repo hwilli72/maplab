@@ -13,6 +13,12 @@ class Map(ipyleaflet.Map):
 
             super().__init__(center=center, zoom=zoom, **kwargs)
 
+            if "layers_control" not in kwargs:
+                kwargs["layers_control"] = True
+            
+            if kwargs["layers_control"]:
+                self.add_layers_control()
+
         def add_search_control(self, position="topleft", **kwargs):
             """Adds a search control to the map.
             Args:
@@ -47,7 +53,7 @@ class Map(ipyleaflet.Map):
                 },
                 "drawError": {
                     "color": "#dd253b",
-                    "message": "Oups!"
+                    "message": "Oops!"
                 },
                 "allowIntersection": False
             }
@@ -67,6 +73,14 @@ class Map(ipyleaflet.Map):
             }
 
             self.add_control(draw_control)
+
+        def add_layers_control(self, position="topright"):
+            """Adds a layers control to the map.
+            Args:
+            kwargs: Keyword arguments to pass to the layers control.
+            """
+            layers_control = ipyleaflet.LayersControl(position=position)
+            self.add_control(layers_control)
 
 def random_string(length, upper=False, digits=False):
     """Generates a random string of a given length.
