@@ -21,14 +21,14 @@ class Map(ipyleaflet.Map):
 
         def add_search_control(self, position="topleft", **kwargs):
             """Adds a search control to the map.
-            
+
             Args:
             self: The map.
-            position (str, optional): The position of the search control. Defaults to "topleft".
-            kwargs: Keyword arguments to pass to the search control.
+                position (str, optional): The position of the search control. Defaults to "topleft".
+                kwargs: Keyword arguments to pass to the search control.
 
             Returns:
-            ipyleaflet.SearchControl: The search control.
+                ipyleaflet.SearchControl: The search control.
             """
             if "url" not in kwargs:
                 kwargs["url"] = 'https://nominatim.openstreetmap.org/search?format=json&q={s}'
@@ -41,11 +41,11 @@ class Map(ipyleaflet.Map):
             """Adds a draw control to the map.
 
             Args:
-            self: The map.
-            kwargs: Keyword arguments to pass to the draw control.
+                self: The map.
+                kwargs: Keyword arguments to pass to the draw control.
 
             Returns:
-            ipyleaflet.DrawControl: The draw control.
+                ipyleaflet.DrawControl: The draw control.
             """
             draw_control = ipyleaflet.DrawControl(**kwargs)
 
@@ -89,11 +89,11 @@ class Map(ipyleaflet.Map):
             """Adds a layers control to the map.
 
             Args:
-            self: The map.
-            position (str, optional): The position of the layers control. Defaults to "topright".
+                self: The map.
+                position (str, optional): The position of the layers control. Defaults to "topright".
 
             Returns:
-            ipyleaflet.LayersControl: The layers control.
+                ipyleaflet.LayersControl: The layers control.
             """
             layers_control = ipyleaflet.LayersControl(position=position)
             self.add_control(layers_control)
