@@ -115,3 +115,30 @@ def random_string(length, upper=False, digits=False):
     if digits:
         letters += string.digits
     return ''.join(random.choice(letters) for i in range(length))
+
+def excel_to_dataframe(excel_file, sheet_name, index_col=None):
+    """Reads an excel file into a pandas dataframe.
+
+    Args:
+        excel_file (str): The path to the excel file.
+        sheet_name (str): The name of the sheet to read.
+        index_col (int, optional): The column to use as the index. Defaults to None.
+
+    Returns:
+        pandas.DataFrame: The dataframe.
+    """
+    return pd.read_excel(excel_file, sheet_name=sheet_name, index_col=index_col)
+
+def copy_columns_to_index(df, columns):
+    """Copies the values of the given columns to the index.
+
+    Args:
+        df (pandas.DataFrame): The dataframe to copy the columns from.
+        columns (list): The columns to copy to the index.
+
+    Returns:
+        pandas.DataFrame: The dataframe with the columns copied to the index.
+    """
+    for column in columns:
+        df[column] = df.index
+    return df
