@@ -124,17 +124,17 @@ def random_string(length, upper=False, digits=False):
 #####  Converting Census Data formatting to a format that will join with the city socioeconomic database
 
 def excel_to_dataframe(excel_file, sheet_name, index_col=None):
-    """Reads an excel file into a pandas dataframe.
+    """Converts an excel file to a dataframe.
 
     Args:
-        excel_file (str): The path to the excel file.
-        sheet_name (str): The name of the sheet to read.
-        index_col (int, optional): The column to use as the index. Defaults to None.
+        excel_file (str): The excel file to convert.
+        sheet_name (str): The name of the sheet to convert.
+        index_col (str, optional): The column to use as the index. Defaults to None.
 
     Returns:
         pandas.DataFrame: The dataframe.
     """
-    return pd.read_excel(excel_file, sheet_name=sheet_name, index_col=index_col)
+    return pandas.read_excel(excel_file, sheet_name=sheet_name, index_col=index_col)
 
 def copy_columns_to_index(df, columns):
     """Copies the values of the given columns to the index.
