@@ -3,6 +3,7 @@
 import string
 import random
 import ipyleaflet
+import pandas
 
 class Map(ipyleaflet.Map):
 
@@ -98,6 +99,10 @@ class Map(ipyleaflet.Map):
             layers_control = ipyleaflet.LayersControl(position=position)
             self.add_control(layers_control)
 
+
+##  Practice with functions
+
+
 def random_string(length, upper=False, digits=False):
     """Generates a random string of a given length.
 
@@ -115,6 +120,8 @@ def random_string(length, upper=False, digits=False):
     if digits:
         letters += string.digits
     return ''.join(random.choice(letters) for i in range(length))
+
+#####  Converting Census Data formatting to a format that will join with the city socioeconomic database
 
 def excel_to_dataframe(excel_file, sheet_name, index_col=None):
     """Reads an excel file into a pandas dataframe.
@@ -142,3 +149,30 @@ def copy_columns_to_index(df, columns):
     for column in columns:
         df[column] = df.index
     return df
+
+def edit_city_names(df, phrase):
+    """Edits the dataframe values by entering a string to remove from the right side of the city name.
+
+    Args:
+        df (pandas.DataFrame): The dataframe to edit.
+        phrase (str): The string to remove from the right side of the county name.
+
+    Returns:
+        pandas.DataFrame: The dataframe with the city names edited.
+    """
+    df = df.str.replace(phrase, "")
+    return df
+
+def aggregate_by_county(df, county_column, agg_column, agg_func):
+    """Aggregates the values of a column by county.
+
+    Args:
+        df (pandas.DataFrame): The dataframe to aggregate.
+        county_column (str): The name of the county column.
+        agg_column (str): The name of the column to aggregate.
+        agg_func (str): The aggregation function to use.
+
+    Returns:
+        pandas.DataFrame: The aggregated dataframe.
+    """
+    return df.groupby(county_column)[agg_column].agg(agg_func)
