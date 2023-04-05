@@ -4,6 +4,7 @@ import string
 import random
 import ipyleaflet
 import pandas
+import openpyxl
 
 class Map(ipyleaflet.Map):
 
