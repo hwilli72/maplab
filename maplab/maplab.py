@@ -5,6 +5,7 @@ import random
 import ipyleaflet
 import pandas
 import openpyxl
+import folium
 
 class Map(ipyleaflet.Map):
 
@@ -99,6 +100,91 @@ class Map(ipyleaflet.Map):
             """
             layers_control = ipyleaflet.LayersControl(position=position)
             self.add_control(layers_control)
+
+        def add_fullscreen_control(self, position="topleft"):
+            """Adds a fullscreen control to the map.
+
+            Args:
+                self: The map.
+                position (str, optional): The position of the fullscreen control. Defaults to "topleft".
+
+            Returns:
+                ipyleaflet.FullScreenControl: The fullscreen control.
+            """
+            fullscreen_control = ipyleaflet.FullScreenControl(position=position)
+            self.add_control(fullscreen_control)
+
+        def add_tile_layer(self, url, name, attribution="", **kwargs):
+            """Adds a tile layer to the map.
+
+            Args:
+                self: The map.
+                url (str): The URL template of the tile layer.
+                attribution (str): The attribution of the tile layer.
+                name (str, optional): The name of the tile layer. Defaults to "OpenStreetMap".
+                kwargs: Keyword arguments to pass to the tile layer.
+
+            Returns:
+                ipyleaflet.TileLayer: The tile layer.
+            """
+            tile_layer = ipyleaflet.TileLayer(url=url, attribution=attribution, name=name, **kwargs)
+            self.add_layer(tile_layer)
+
+        def add_basemap(self, basemap):
+            """Adds a basemap to the map.
+
+            Args:
+                self: The map.
+                basemap (str): The name of the basemap to add.
+
+            Returns:
+                ipyleaflet.BasemapLayer: The basemap layer.
+            """
+            import xyzservices.providers as xyz
+            try:
+                layer = eval(f"xyz.{basemap}")
+                url = layer.build_url()
+                attribution = layer.attribution
+                self.add_tile_layer(url=url, attribution=attribution, name=basemap)
+
+            except:
+                raise ValueError(f"Invalid basemap name: {basemap}")
+    
+        def add_geojson(self, data, **kwargs):
+            """Adds a GeoJSON layer to the map.
+            Args:
+                self: The map.
+                data (dict): The GeoJSON data.
+                kwargs: Keyword arguments to pass to the GeoJSON layer.
+
+            Returns:
+                ipyleaflet.GeoJSON: The GeoJSON layer.
+            """
+            import json
+
+            if isinstance(data, str):
+                with open(data, "r") as f:
+                    data = json.load(f)
+
+            geojson = ipyleaflet.GeoJSON(data=data, **kwargs)
+            self.add_layer(geojson)
+
+        def add_shp(self, shapefile, **kwargs):
+            """Adds a shapefile to the map.
+
+            Args:
+                self: The map.
+                shapefile (str): The path to the shapefile.
+                kwargs: Keyword arguments to pass to the shapefile layer.
+
+            Returns:
+                ipyleaflet.SHP: The shapefile layer.
+            """
+            import geopandas as gpd
+
+            gdf = gpd.read_file(shapefile)
+            shapefile = ipyleaflet.GeoJSON(data=gdf.to_json(), **kwargs)
+            self.add_layer(shapefile)
 
 
 ##  Practice with functions
