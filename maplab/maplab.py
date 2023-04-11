@@ -186,6 +186,48 @@ class Map(ipyleaflet.Map):
             shapefile = ipyleaflet.GeoJSON(data=gdf.to_json(), **kwargs)
             self.add_layer(shapefile)
 
+        def add_raster(self, url, name='Raster', fit_bounds=True, **kwargs):
+            """Adds a raster layer to the map.
+
+            Args:
+                self: The map.
+                url (str): The URL to the raster.
+                name (str, optional): The name of the raster layer. Defaults to "Raster".
+                fit_bounds (bool, optional): Whether to fit the bounds of the map to the raster. Defaults to True.
+                kwargs: Keyword arguments to pass to the raster layer.
+
+            Returns:
+                ipyleaflet.RasterLayer: The raster layer.
+            """
+            import httpx
+
+            titiler_endpoint = "https://titiler.xyz"
+
+            r = httpx.get(
+                f"{titiler_endpoint}/cog/info",
+                params = {
+                    "url": url,
+                }
+            ).json()
+
+            bounds = r["bounds"]
+
+            r = httpx.get(
+                f"{titiler_endpoint}/cog/tilejson.json",
+                params = {
+                    "url": url,
+                }
+            ).json()
+
+            tile = r["tiles"][0]
+
+            self.add_tile_layer(url=tile, name=name, **kwargs)
+
+            if fit_bounds:
+                bbox = [[bounds[0], bounds[1]], [bounds[2], bounds[3]]]
+                self.fit_bounds(bbox)
+
+
 
 ##  Practice with functions
 
