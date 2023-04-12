@@ -168,8 +168,8 @@ class Map(ipyleaflet.Map):
 
             geojson = ipyleaflet.GeoJSON(data=data, **kwargs)
             self.add_layer(geojson)
-
-        def add_shp(self, shapefile, **kwargs):
+            
+        def add_shp(self, data, name='Shapefile', **kwargs):
             """Adds a shapefile to the map.
 
             Args:
@@ -181,10 +181,10 @@ class Map(ipyleaflet.Map):
                 ipyleaflet.SHP: The shapefile layer.
             """
             import geopandas as gpd
-
-            gdf = gpd.read_file(shapefile)
-            shapefile = ipyleaflet.GeoJSON(data=gdf.to_json(), **kwargs)
-            self.add_layer(shapefile)
+        
+            gdf = gpd.read_file(data)
+            geojson = gdf.__geo_interface__
+            self.add_geojson(geojson, name=name, **kwargs)
 
         def add_raster(self, url, name='Raster', fit_bounds=True, **kwargs):
             """Adds a raster layer to the map.
@@ -227,6 +227,24 @@ class Map(ipyleaflet.Map):
                 bbox = [[bounds[0], bounds[1]], [bounds[2], bounds[3]]]
                 self.fit_bounds(bbox)
 
+class Map(folium.Map):
+    """A folium map with additional functionality.
+
+    Returns:
+        folium.Map: The map.
+    """
+    def __init__(self, center, zoom, **kwargs) -> None:
+
+        if "scroll_wheel_zoom" not in kwargs:
+            kwargs["scroll_wheel_zoom"] = True
+
+        super().__init__(center=center, zoom=zoom, **kwargs)
+
+        if "layers_control" not in kwargs:
+            kwargs["layers_control"] = True
+            
+        if kwargs["layers_control"]:
+            self.add_layers_control()
 
 
 ##  Practice with functions
