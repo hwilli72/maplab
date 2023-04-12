@@ -2,25 +2,147 @@
 
 import string
 import random
-import ipyleaflet
+import ipyleaflet 
 import pandas
+import geopandas
 import openpyxl
-import folium
+import folium 
+import os
+import geemap
+import folium.plugins as plugins
+from box import Box 
+from geemap import xyz_to_folium
+from geemap import vector_to_geojson 
+
+basemaps = Box(xyz_to_folium(), frozen_box=True)
 
 class Map(ipyleaflet.Map):
+        def __init__(self, **kwargs):
+            # Default map center location and zoom level
+            latlon = [20, 0]
+            zoom = 2
 
-        def __init__(self, center, zoom, **kwargs) -> None:
+            # Interchangeable parameters between ipyleaflet and folium
+            if "center" in kwargs:
+                kwargs["location"] = kwargs["center"]
+                kwargs.pop("center")
+            if "location" in kwargs:
+                latlon = kwargs["location"]
+            else:
+                kwargs["location"] = latlon
 
-            if "scroll_wheel_zoom" not in kwargs:
-                kwargs["scroll_wheel_zoom"] = True
+            if "zoom" in kwargs:
+                kwargs["zoom_start"] = kwargs["zoom"]
+                kwargs.pop("zoom")
+            if "zoom_start" in kwargs:
+                zoom = kwargs["zoom_start"]
+            else:
+                kwargs["zoom_start"] = zoom
+            if "max_zoom" not in kwargs:
+                kwargs["max_zoom"] = 24
 
-            super().__init__(center=center, zoom=zoom, **kwargs)
+            if "scale_control" not in kwargs:
+                kwargs["scale_control"] = True
+
+            if kwargs["scale_control"]:
+                kwargs["control_scale"] = True
+                kwargs.pop("scale_control")
+
+            # if "control_scale" not in kwargs:
+            #     kwargs["control_scale"] = True
+
+            if "draw_export" not in kwargs:
+                kwargs["draw_export"] = False
+
+            if "height" in kwargs and isinstance(kwargs["height"], str):
+                kwargs["height"] = float(kwargs["height"].replace("px", ""))
+
+            if (
+                "width" in kwargs
+                and isinstance(kwargs["width"], str)
+                and ("%" not in kwargs["width"])
+            ):
+                kwargs["width"] = float(kwargs["width"].replace("px", ""))
+
+            height = None
+            width = None
+
+            if "height" in kwargs:
+                height = kwargs.pop("height")
+            else:
+                height = 600
+
+            if "width" in kwargs:
+                width = kwargs.pop("width")
+            else:
+                width = "100%"
+
+            super().__init__(**kwargs)
+            self.baseclass = "folium"
+
+            if (height is not None) or (width is not None):
+                f = folium.Figure(width=width, height=height)
+                self.add_to(f)
+
+            if "fullscreen_control" not in kwargs:
+                kwargs["fullscreen_control"] = True
+            if kwargs["fullscreen_control"]:
+                plugins.Fullscreen().add_to(self)
+
+            if "draw_control" not in kwargs:
+                kwargs["draw_control"] = True
+            if kwargs["draw_control"]:
+                plugins.Draw(export=kwargs.get("draw_export")).add_to(self)
+
+            if "measure_control" not in kwargs:
+                kwargs["measure_control"] = True
+            if kwargs["measure_control"]:
+                plugins.MeasureControl(position="bottomleft").add_to(self)
+
+            if "latlon_control" not in kwargs:
+                kwargs["latlon_control"] = False
+            if kwargs["latlon_control"]:
+                folium.LatLngPopup().add_to(self)
+
+            if "locate_control" not in kwargs:
+                kwargs["locate_control"] = False
+            if kwargs["locate_control"]:
+                plugins.LocateControl().add_to(self)
+
+            if "minimap_control" not in kwargs:
+                kwargs["minimap_control"] = False
+            if kwargs["minimap_control"]:
+                plugins.MiniMap().add_to(self)
+
+            if "search_control" not in kwargs:
+                kwargs["search_control"] = True
+            if kwargs["search_control"]:
+                plugins.Geocoder(collapsed=True, position="topleft").add_to(self)
+
+            if "google_map" not in kwargs:
+                pass
+            elif kwargs["google_map"] is not None:
+                if kwargs["google_map"].upper() == "ROADMAP":
+                    layer = basemaps["ROADMAP"]
+                elif kwargs["google_map"].upper() == "HYBRID":
+                    layer = basemaps["HYBRID"]
+                elif kwargs["google_map"].upper() == "TERRAIN":
+                    layer = basemaps["TERRAIN"]
+                elif kwargs["google_map"].upper() == "SATELLITE":
+                    layer = basemaps["SATELLITE"]
+                else:
+                    print(
+                        f'{kwargs["google_map"]} is invalid. google_map must be one of: ["ROADMAP", "HYBRID", "TERRAIN", "SATELLITE"]. Adding the default ROADMAP.'
+                    )
+                    layer = basemaps["ROADMAP"]
+                layer.add_to(self)
 
             if "layers_control" not in kwargs:
-                kwargs["layers_control"] = True
-            
-            if kwargs["layers_control"]:
-                self.add_layers_control()
+                self.options["layersControl"] = True
+            else:
+                self.options["layersControl"] = kwargs["layers_control"]
+
+            self.fit_bounds([latlon, latlon], max_zoom=zoom)
 
         def add_search_control(self, position="topleft", **kwargs):
             """Adds a search control to the map.
@@ -130,25 +252,45 @@ class Map(ipyleaflet.Map):
             tile_layer = ipyleaflet.TileLayer(url=url, attribution=attribution, name=name, **kwargs)
             self.add_layer(tile_layer)
 
-        def add_basemap(self, basemap):
+        def add_basemap(self, basemap="HYBRID", show=True, **kwargs):
             """Adds a basemap to the map.
 
             Args:
-                self: The map.
-                basemap (str): The name of the basemap to add.
+                basemap (str, optional): Can be one of string from ee_basemaps. Defaults to 'HYBRID'.
+                show (bool, optional): Whether to show the basemap. Defaults to True.
+                **kwargs: Additional keyword arguments to pass to folium.TileLayer.
 
             Returns:
                 ipyleaflet.BasemapLayer: The basemap layer.
             """
-            import xyzservices.providers as xyz
-            try:
-                layer = eval(f"xyz.{basemap}")
-                url = layer.build_url()
-                attribution = layer.attribution
-                self.add_tile_layer(url=url, attribution=attribution, name=basemap)
+            import xyzservices 
 
-            except:
-                raise ValueError(f"Invalid basemap name: {basemap}")
+            try:
+                if isinstance(basemap, xyzservices.TileProvider):
+                    name = basemap.name
+                    url = basemap.build_url()
+                    attribution = basemap.attribution
+                    if "max_zoom" in basemap.keys():
+                        max_zoom = basemap["max_zoom"]
+                    else:
+                        max_zoom = 22
+                    layer = ipyleaflet.TileLayer(
+                        tiles=url,
+                        attr=attribution,
+                        name=name,
+                        max_zoom=max_zoom,
+                        overlay=True,
+                        control=True,
+                        show=show,
+                        **kwargs,
+                    )
+
+                    self.add_layer(layer)
+
+            except Exception:
+                raise Exception(
+                    "Invalid basemap."
+                )
     
         def add_geojson(self, data, **kwargs):
             """Adds a GeoJSON layer to the map.
@@ -174,17 +316,59 @@ class Map(ipyleaflet.Map):
 
             Args:
                 self: The map.
-                shapefile (str): The path to the shapefile.
+                data: The shapefile data.
+                name (str, optional): The name of the shapefile layer. Defaults to "Shapefile".
                 kwargs: Keyword arguments to pass to the shapefile layer.
 
             Returns:
-                ipyleaflet.SHP: The shapefile layer.
+                gdf.__geo_interface__: The shapefile layer.
             """
             import geopandas as gpd
         
             gdf = gpd.read_file(data)
             geojson = gdf.__geo_interface__
             self.add_geojson(geojson, name=name, **kwargs)
+
+        def add_vector(
+            self,
+            filename,
+            layer_name="Untitled",
+            bbox=None,
+            mask=None,
+            rows=None,
+            info_mode="on_hover",
+            **kwargs,
+        ):
+            """Adds any geopandas-supported vector dataset to the map.
+
+            Args:
+                filename (str): Either the absolute or relative path to the file or URL to be opened, or any object with a read() method (such as an open file or StringIO).
+                layer_name (str, optional): The layer name to use. Defaults to "Untitled".
+                bbox (tuple | GeoDataFrame or GeoSeries | shapely Geometry, optional): Filter features by given bounding box, GeoSeries, GeoDataFrame or a shapely geometry. CRS mis-matches are resolved if given a GeoSeries or GeoDataFrame. Cannot be used with mask. Defaults to None.
+                mask (dict | GeoDataFrame or GeoSeries | shapely Geometry, optional): Filter for features that intersect with the given dict-like geojson geometry, GeoSeries, GeoDataFrame or shapely geometry. CRS mis-matches are resolved if given a GeoSeries or GeoDataFrame. Cannot be used with bbox. Defaults to None.
+                rows (int or slice, optional): Load in specific rows by passing an integer (first n rows) or a slice() object.. Defaults to None.
+                info_mode (str, optional): Displays the attributes by either on_hover or on_click. Any value other than "on_hover" or "on_click" will be treated as None. Defaults to "on_hover".
+            
+            """
+            if not filename.startswith("http"):
+                filename = os.path.abspath(filename)
+
+            ext = os.path.splitext(filename)[1].lower()
+            if ext == ".shp":
+                self.add_shp(filename, layer_name, **kwargs)
+            elif ext in [".json", ".geojson"]:
+                self.add_geojson(filename, layer_name, **kwargs)
+            else:
+                geojson = vector_to_geojson(
+                    filename,
+                    bbox=bbox,
+                    mask=mask,
+                    rows=rows,
+                    epsg="4326",
+                    **kwargs,
+                )
+
+                self.add_geojson(geojson, layer_name, info_mode=info_mode, **kwargs)
 
         def add_raster(self, url, name='Raster', fit_bounds=True, **kwargs):
             """Adds a raster layer to the map.
@@ -226,25 +410,6 @@ class Map(ipyleaflet.Map):
             if fit_bounds:
                 bbox = [[bounds[0], bounds[1]], [bounds[2], bounds[3]]]
                 self.fit_bounds(bbox)
-
-class Map(folium.Map):
-    """A folium map with additional functionality.
-
-    Returns:
-        folium.Map: The map.
-    """
-    def __init__(self, center, zoom, **kwargs) -> None:
-
-        if "scroll_wheel_zoom" not in kwargs:
-            kwargs["scroll_wheel_zoom"] = True
-
-        super().__init__(center=center, zoom=zoom, **kwargs)
-
-        if "layers_control" not in kwargs:
-            kwargs["layers_control"] = True
-            
-        if kwargs["layers_control"]:
-            self.add_layers_control()
 
 
 ##  Practice with functions
