@@ -11,7 +11,7 @@ class Map(folium.Map):
         zoom (int, optional): The zoom level of the map. Defaults to 2.
         **kwargs: Keyword arguments passed to the folium map.
     """
-    
+
     def __init__(self, center=[20,0], zoom=2, **kwargs) -> None:
         """Adds the ability to use a mouse to zoom in and out.
         
@@ -158,7 +158,7 @@ class Map(folium.Map):
         self.add_geojson(geojson, name=name, **kwargs)
 
 # Add a Raster Function
-    def add_raster(self, data, name='Raster', fit_bounds=True, **kwargs):
+    def add_raster(self, url, name='Raster', fit_bounds=True, **kwargs):
         """Add a raster layer to the map.
         
         Args:
