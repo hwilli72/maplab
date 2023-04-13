@@ -205,6 +205,21 @@ class Map(ipyleaflet.Map):
         geojson = gdf.__geo_interface__
         self.add_geojson(geojson, name=name, **kwargs)
 
+    def add_gdf(self, gdf, name='GeoDataFrame', **kwargs):
+        """Adds a geopandas GeoDataFrame to the map.
+
+        Args:
+            self: The map.
+            gdf: The geopandas GeoDataFrame.
+            name (str, optional): The name of the GeoDataFrame layer. Defaults to "GeoDataFrame".
+            kwargs: Keyword arguments to pass to the GeoDataFrame layer.
+
+        Returns:
+            gdf.__geo_interface__: The GeoDataFrame layer.
+        """
+        geojson = gdf.__geo_interface__
+        self.add_geojson(geojson, name=name, **kwargs)
+
     def add_vector(self, data, name='Vector', **kwargs):
         """ Adds any geopandas supported vector data to the map.
         Args:
