@@ -1,4 +1,4 @@
-"""Folium module."""
+"""Foliumap module."""
 import string
 import random
 import folium
@@ -38,6 +38,45 @@ class Map(folium.Map):
             **kwargs
         )
         self.add_child(tile_layer)
+
+# Add basemap function
+    def add_basemap(self, name, **kwargs):
+        """Add a basemap from folium to the map.
+        Args:
+            name (str): The name of the basemap.
+        """
+        basemap = folium.basemaps[name](**kwargs)
+        self.add_child(basemap)
+
+# Add shapefile function
+    def add_shapefile(self, path, name, **kwargs):
+        """Add a shapefile to the map.
+        Args:
+            path (str): The path to the shapefile.
+            name (str): The name of the shapefile.
+        """
+        shapefile = folium.features.GeoJson(
+            data=path,
+            name=name,
+            **kwargs
+        )
+        self.add_child(shapefile)
+
+# Add GeoJSON function
+    def add_geojson(self, path, name, **kwargs):
+        """Add a GeoJSON file to the map.
+        Args:
+            path (str): The path to the GeoJSON file.
+            name (str): The name of the GeoJSON file.
+        """
+        geojson = folium.features.GeoJson(
+            data=path,
+            name=name,
+            **kwargs
+        )
+        self.add_child(geojson)
+
+
 
 
 
