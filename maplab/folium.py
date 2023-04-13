@@ -1,5 +1,4 @@
 """Folium module."""
-
 import string
 import random
 import folium
@@ -39,3 +38,7 @@ class Map(folium.Map):
             **kwargs
         )
         self.add_child(tile_layer)
+
+
+
+

@@ -4,7 +4,7 @@ import string
 import random
 import ipyleaflet 
 import pandas
-import geopandas
+import geopandas 
 import openpyxl
 import folium 
 
