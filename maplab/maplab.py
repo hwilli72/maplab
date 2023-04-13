@@ -233,9 +233,8 @@ class Map(ipyleaflet.Map):
         if data.endswith(".geojson"):
             self.add_geojson(data, name=name, **kwargs)
         else:
-            gdf = gpd.read_file(data)
-            geojson = gdf.to_json() 
-            self.add_geojson(geojson, name=name, **kwargs)
+            gdf = gpd.read_file(data) 
+            self.add_gdf(gdf, name=name, **kwargs)
 
     def add_raster(self, url, name='Raster', fit_bounds=True, **kwargs):
         """Adds a raster layer to the map.
