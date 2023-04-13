@@ -212,6 +212,7 @@ class Map(ipyleaflet.Map):
                 data: The vector data.
                 name (str, optional): The name of the vector layer. Defaults to "Vector".
                 kwargs: Keyword arguments to pass to the vector layer."""
+
             if data.endswith(".shp"):
                 self.add_shp(data, name=name, **kwargs)
             if data.endswith(".geojson"):
