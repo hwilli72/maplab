@@ -1,4 +1,4 @@
  
-# foliumap module
+# folium module
 
 ::: maplab.foliumap
