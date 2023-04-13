@@ -4,7 +4,8 @@ import string
 import random
 import folium
 
-class Map(foliumap.Map):
+class Map(folium.Map):
+
     """A folium map with additional functionality.
     Args:
         center (list, optional): The center of the map. Defaults to [20,0].
