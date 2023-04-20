@@ -276,21 +276,32 @@ class Map(ipyleaflet.Map):
         if fit_bounds:
             bbox = [[bounds[0], bounds[1]], [bounds[2], bounds[3]]]
             self.fit_bounds(bbox)
+    
 
-    def add_image(self, url, name='Image', **kwargs):
-        """Adds an image layer to the map.
-
+    def add_image(self, path, w=250, h=250):
+        """Adds a small image (like your logo) to the bottom right of the map
         Args:
-            self: The map.
-            url (str): The URL to the image.
-            name (str, optional): The name of the image layer. Defaults to "Image".
-            kwargs: Keyword arguments to pass to the image layer.
-
-        Returns:
-            ipyleaflet.ImageOverlay: The image layer.
+        file (str): the filepath of the image
+        w (int) : width of the image (defaults 250 px)
+        h (int) : height of the image (defaults 250 px)
         """
-        image = ipyleaflet.ImageOverlay(url=url, **kwargs)
-        self.add_layer(image)
+        import ipywidgets as widgets
+
+        file = open(path, "rb")
+        image = file.read()
+        i = widgets.Image(
+            value=image,
+            format='png',
+            width=w,
+            height=h,
+        )
+                
+        output_widget = widgets.Output()
+        output_control = ipyleaflet.WidgetControl(widget=output_widget, position='bottomright')
+        self.add_control(output_control)
+        with output_widget:
+            display(i)
+
 
 
 ##  Practice with functions
