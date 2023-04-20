@@ -277,6 +277,21 @@ class Map(ipyleaflet.Map):
             bbox = [[bounds[0], bounds[1]], [bounds[2], bounds[3]]]
             self.fit_bounds(bbox)
 
+    def add_image(self, url, name='Image', **kwargs):
+        """Adds an image layer to the map.
+
+        Args:
+            self: The map.
+            url (str): The URL to the image.
+            name (str, optional): The name of the image layer. Defaults to "Image".
+            kwargs: Keyword arguments to pass to the image layer.
+
+        Returns:
+            ipyleaflet.ImageOverlay: The image layer.
+        """
+        image = ipyleaflet.ImageOverlay(url=url, **kwargs)
+        self.add_layer(image)
+
 
 ##  Practice with functions
 
@@ -354,3 +369,21 @@ def aggregate_by_county(df, county_column, agg_column, agg_func):
         pandas.DataFrame: The aggregated dataframe.
     """
     return df.groupby(county_column)[agg_column].agg(agg_func)
+
+def join_shapefile_to_dataframe(df, shapefile, index_column, join_column):
+    """Joins a shapefile to a dataframe.
+
+    Args:
+        df (pandas.DataFrame): The dataframe to join.
+        shapefile (str): The shapefile to join.
+        index_column (str): The column to use as the index.
+        join_column (str): The column to join on.
+
+    Returns:
+        geopandas.GeoDataFrame: The joined dataframe.
+    """
+    gdf = geopandas.read_file(shapefile)
+    gdf = gdf.set_index(index_column)
+    gdf[join_column] = gdf.index
+    gdf = gdf.join(df, on=join_column)
+    return gdf

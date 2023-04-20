@@ -4,3 +4,7 @@ pandas
 openpyxl
 httpx
 geopandas
+xyzservices
+string
+random
+json

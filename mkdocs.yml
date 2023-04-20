@@ -54,6 +54,7 @@ nav:
         - examples/maplab.ipynb
         - examples/visualizingvectordata.ipynb
         - examples/foliumap.ipynb
+        - examples/raster.ipynb
     - API Reference:
           - maplab module: maplab.md
           - folium module: foliumap.md
