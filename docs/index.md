@@ -4,7 +4,7 @@
 [![image](https://img.shields.io/pypi/v/maplab.svg)](https://pypi.python.org/pypi/maplab)
 
 
-**Python Boilerplate contains all the boilerplate you need to create a Python package.**
+**Manage and format data for use on a map**
 
 
 -   Free software: MIT license
