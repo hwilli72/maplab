@@ -5,7 +5,7 @@
 [![image](https://img.shields.io/conda/vn/conda-forge/maplab.svg)](https://anaconda.org/conda-forge/maplab)
 
 
-**Python Boilerplate contains all the boilerplate you need to create a Python package.**
+**Manage and format data for use on a map.**
 
 
 -   Free software: MIT license
