@@ -159,6 +159,12 @@ class Map(ipyleaflet.Map):
         elif basemap.lower() == "satellite":
             url = 'http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}'
             self.add_tile_layer(url, name=basemap, **kwargs)
+        elif basemap.lower() == "terrain_only":
+            url = 'http://mt0.google.com/vt/lyrs=t&hl=en&x={x}&y={y}&z={z}'
+            self.add_tile_layer(url, name=basemap, **kwargs)
+        elif basemap.lower() == "terrain":
+            url = 'http://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}'
+            self.add_tile_layer(url, name=basemap, **kwargs)
         else:
             try:
                 basemap = eval(f"xyz.{basemap}")
@@ -303,6 +309,94 @@ class Map(ipyleaflet.Map):
             display(i)
 
 
+    def add_toolbar(self, position="topright"):
+        """Adds a dropdown widget to select a basemap.
+
+        Args:
+            self: The map.
+            position (str, optional): The position of the toolbar. Defaults to "topright".
+        """
+        import ipywidgets as widgets
+
+        widget_width = "250px"
+        padding = "0px 0px 0px 5px"  # upper, right, bottom, left
+
+        toolbar_button = widgets.ToggleButton(
+            value=False,
+            tooltip="Toolbar",
+            icon="wrench",
+            layout=widgets.Layout(width="28px", height="28px", padding=padding),
+        )
+
+        close_button = widgets.ToggleButton(
+            value=False,
+            tooltip="Close the tool",
+            icon="times",
+            button_style="primary",
+            layout=widgets.Layout(height="28px", width="28px", padding=padding),
+        )
+
+        toolbar = widgets.HBox([toolbar_button, close_button])
+
+        def toolbar_click(change):
+            if change["new"]:
+                toolbar.children = [toolbar_button, close_button]
+            else:
+                toolbar.children = [toolbar_button]
+                
+        toolbar_button.observe(toolbar_click, "value")
+
+        def close_click(change):
+            if change["new"]:
+                toolbar_button.close()
+                close_button.close()
+                toolbar.close()
+                
+        close_button.observe(close_click, "value")
+
+        rows = 2
+        cols = 2
+        grid = widgets.GridspecLayout(rows, cols, grid_gap="0px", layout=widgets.Layout(width="65px"))
+
+        icons = ["folder-open", "map", "bluetooth", "area-chart"]
+
+        for i in range(rows):
+            for j in range(cols):
+                grid[i, j] = widgets.Button(description="", button_style="primary", icon=icons[i*rows+j], 
+                                            layout=widgets.Layout(width="28px", padding="0px"))
+                
+        toolbar = widgets.VBox([toolbar_button])
+
+        basemap = widgets.Dropdown(
+            options=['OpenStreetMap', 'ROADMAP', 'SATELLITE','TERRAIN','TERRAIN WITH LABELS'],
+            value=None,
+            description='Basemap:',
+            style={'description_width': 'initial'},
+            layout=widgets.Layout(width='250px')
+        )
+
+        basemap_ctrl = ipyleaflet.WidgetControl(widget=basemap, position='topright')
+
+        def change_basemap(change):
+            if change['new']:
+                self.add_basemap(basemap.value)
+
+        basemap.observe(change_basemap, names='value')
+
+        self.add_control(basemap_ctrl)
+
+        def toolbar_click(change):
+            if change["new"]:
+                toolbar.children = [widgets.HBox([close_button, toolbar_button]), grid]
+            else:
+                toolbar.children = [toolbar_button]
+                
+        toolbar_button.observe(toolbar_click, "value")
+
+        toolbar_ctrl = ipyleaflet.WidgetControl(widget=toolbar, position=position)
+
+        self.add_control(toolbar_ctrl)
+
 
 ##  Practice with functions
 
@@ -325,7 +419,9 @@ def random_string(length, upper=False, digits=False):
         letters += string.digits
     return ''.join(random.choice(letters) for i in range(length))
 
+
 #####  Converting Census Data formatting to a format that will join with the city socioeconomic database
+
 
 def excel_to_dataframe(excel_file, sheet_name, index_col=None):
     """Converts an excel file to a dataframe.
