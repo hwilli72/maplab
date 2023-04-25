@@ -383,7 +383,17 @@ class Map(ipyleaflet.Map):
 
         basemap.observe(change_basemap, names='value')
 
-        self.add_control(basemap_ctrl)
+        def toolbar_click(b):
+            with b:
+                b.clear_output()
+                print(f"You clicked the {b.icon} button.")
+
+                if b.icon == 'map':
+                    self.add_control(basemap_ctrl)
+        for i in range(rows):
+            for j in range(cols):
+                tool = grid[i, j]
+                tool.on_click(toolbar_click)
 
         def toolbar_click(change):
             if change["new"]:
