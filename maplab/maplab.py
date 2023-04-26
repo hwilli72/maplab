@@ -308,10 +308,8 @@ class Map(ipyleaflet.Map):
         with output_widget:
             display(i)
 
-
     def add_toolbar(self, position="topright"):
         """Adds a dropdown widget to select a basemap.
-
         Args:
             self: The map.
             position (str, optional): The position of the toolbar. Defaults to "topright".
@@ -338,14 +336,6 @@ class Map(ipyleaflet.Map):
 
         toolbar = widgets.HBox([toolbar_button, close_button])
 
-        def toolbar_click(change):
-            if change["new"]:
-                toolbar.children = [toolbar_button, close_button]
-            else:
-                toolbar.children = [toolbar_button]
-                
-        toolbar_button.observe(toolbar_click, "value")
-
         def close_click(change):
             if change["new"]:
                 toolbar_button.close()
@@ -367,6 +357,8 @@ class Map(ipyleaflet.Map):
                 
         toolbar = widgets.VBox([toolbar_button])
 
+### Basemap info
+
         basemap = widgets.Dropdown(
             options=['OpenStreetMap', 'ROADMAP', 'SATELLITE','TERRAIN','TERRAIN WITH LABELS'],
             value=None,
@@ -383,17 +375,24 @@ class Map(ipyleaflet.Map):
 
         basemap.observe(change_basemap, names='value')
 
-        def toolbar_click(b):
-            with b:
-                b.clear_output()
-                print(f"You clicked the {b.icon} button.")
+### Dropdown
 
+        output = widgets.Output()
+        output_ctrl = ipyleaflet.WidgetControl(widget=output, position="bottomright")
+        self.add_control(output_ctrl)
+
+        def tool_click(b):
+            with output:
+                output.clear_output()
+                print(f"You clicked the {b.icon} button.")
                 if b.icon == 'map':
-                    self.add_control(basemap_ctrl)
+                    if basemap_ctrl not in self.controls:
+                        self.add_control(basemap_ctrl)
+        
         for i in range(rows):
             for j in range(cols):
                 tool = grid[i, j]
-                tool.on_click(toolbar_click)
+                tool.on_click(tool_click)
 
         def toolbar_click(change):
             if change["new"]:
