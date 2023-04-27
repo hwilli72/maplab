@@ -341,6 +341,7 @@ class Map(ipyleaflet.Map):
                 toolbar_button.close()
                 close_button.close()
                 toolbar.close()
+                basemap.close()
                 
         close_button.observe(close_click, "value")
 
