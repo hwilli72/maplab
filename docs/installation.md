@@ -21,3 +21,32 @@ You can clone the public repository:
 ```
 git clone git://github.com/hwilli72/maplab
 ```
+
+## Install from GitHub
+
+To install the development version from GitHub using Git, run this command in your terminal:
+
+```
+pip install git+https://github.com/hwilli72/maplab
+```
+
+## Install from Anaconda
+
+To install MabLab from [Anaconda](https://anaconda.org/conda-forge/maplab), run this command in your terminal:
+
+```
+conda install -c conda-forge maplab
+```
+
+## Upgrade MapLab
+
+To upgrade MapLab to the latest version, run this command in your terminal:
+
+```
+pip install -U maplab
+```
+Using conda, you can update MapLab using the following command:
+
+```
+conda update -c conda-forge maplab
+```
