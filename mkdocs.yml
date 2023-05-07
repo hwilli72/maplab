@@ -49,13 +49,10 @@ nav:
     - Changelog: changelog.md
     - Report Issues: https://github.com/hwilli72/maplab/issues
     - Examples:
-        - examples/intro.ipynb
+        - examples/adding_data_to_a_map.ipynb
         - examples/ipyleaflet.ipynb
         - examples/maplab.ipynb
-        - examples/vector.ipynb
         - examples/foliumap.ipynb
-        - examples/raster.ipynb
-        - examples/image.ipynb
         - examples/widgets.ipynb
     - API Reference:
           - maplab module: maplab.md

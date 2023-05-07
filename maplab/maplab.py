@@ -4,9 +4,9 @@ import string
 import random
 import ipyleaflet 
 import pandas
-import geopandas 
+import geopandas
 import openpyxl
-import folium 
+import folium
 
 class Map(ipyleaflet.Map):
     
@@ -306,7 +306,7 @@ class Map(ipyleaflet.Map):
         output_control = ipyleaflet.WidgetControl(widget=output_widget, position='bottomright')
         self.add_control(output_control)
         with output_widget:
-            display(i)
+            self.add_control(ipyleaflet.WidgetControl(widget=i, position='bottomright'))
 
     def add_toolbar(self, position="topright"):
         """Adds a dropdown widget to select a basemap.
