@@ -407,6 +407,42 @@ class Map(ipyleaflet.Map):
 
         self.add_control(toolbar_ctrl)
 
+    def add_swipe_control(self, layer1_url, layer2_url, swipe_position):	        
+        # Create the two layers to swipe between
+        layer1 = ipyleaflet.TileLayer(url=layer1_url, name="Layer 1")
+        layer2 = ipyleaflet.TileLayer(url=layer2_url, name="Layer 2")
+
+        # Create a layer group to hold the two layers
+        layer_group = ipyleaflet.LayerGroup(layers=(layer1, layer2))
+
+        # Add the layer group to the map
+        self.add_layer(layer_group)
+
+        # Create the swipe control and add it to the map
+        swipe_control = ipyleaflet.SplitMapControl(left_layer=layer1, right_layer=layer2, position=swipe_position)
+        self.add_control(swipe_control)
+
+        # make the swipe control draggable
+        def on_mouse_down(event):
+            swipe_control.dragging = True
+            swipe_control.start_x = event['containerPoint'][0]
+
+        def on_mouse_move(event):
+            if swipe_control.dragging:
+                delta = event['containerPoint'][0] - swipe_control.start_x
+                swipe_control.split_position += delta / self.width * 100
+                swipe_control.start_x = event['containerPoint'][0]
+
+        def on_mouse_up(event):
+            swipe_control.dragging = False
+
+        self.on_interaction(on_mouse_down, 'mousedown')
+        self.on_interaction(on_mouse_move, 'mousemove')
+        self.on_interaction(on_mouse_up, 'mouseup')
+
+        print("Swipe tool added to map")
+
+
 
 ##  Practice with functions
 
@@ -504,3 +540,17 @@ def join_shapefile_to_dataframe(df, shapefile, index_column, join_column):
     gdf[join_column] = gdf.index
     gdf = gdf.join(df, on=join_column)
     return gdf
+
+def columns_to_list(df, columns):
+    """Converts the values of the given columns to a list.
+
+    Args:
+        df (pandas.DataFrame): The dataframe to convert.
+        columns (list): The columns to convert.
+
+    Returns:
+        pandas.DataFrame: The dataframe with the columns converted to lists.
+    """
+    for column in columns:
+        df[column] = df[column].str.split(", ")
+    return df
