@@ -8,9 +8,9 @@
 
 
 -   Free software: MIT license
--   Documentation: https://hwilli72.github.io/maplab
--   GitHub: https://github.com/hwilli72/maplab 
--   PyPI: https://pypi.org/project/maplab/
+-   Documentation: [https://hwilli72.github.io/maplab](https://hwilli72.github.io/maplab)
+-   GitHub: [https://github.com/hwilli72/maplab](https://github.com/hwilli72/maplab) 
+-   PyPI: [https://pypi.org/project/maplab/](https://pypi.org/project/maplab/)
 -   YouTube tutorial:
     
 

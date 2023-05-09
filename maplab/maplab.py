@@ -443,64 +443,24 @@ class Map(ipyleaflet.Map):
             url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2001_Land_Cover_L48/wms?'
             layers = 'NLCD_2001_Land_Cover'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2001 impervious":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2001_Impervious/wms'
-            layers = 'NLCD_2001_Impervious'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2001 tree canopy":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2001_Tree_Canopy/wms'
-            layers = 'NLCD_2001_Tree_Canopy'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2004 land cover":
             url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2004_Land_Cover_L48/wms?'
             layers = 'NLCD_2004_Land_Cover'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2004 impervious":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2004_Impervious/wms'
-            layers = 'NLCD_2004_Impervious'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2004 tree canopy":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2004_Tree_Canopy/wms'
-            layers = 'NLCD_2004_Tree_Canopy'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2006 land cover":
             url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2006_Land_Cover_L48/wms?'
             layers = 'NLCD_2006_Land_Cover'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2006 impervious":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2006_Impervious/wms'
-            layers = 'NLCD_2006_Impervious'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2006 tree canopy":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2006_Tree_Canopy/wms'
-            layers = 'NLCD_2006_Tree_Canopy'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2008 land cover":
             url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2008_Land_Cover_L48/wms?'
             layers = 'NLCD_2008_Land_Cover'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2008 impervious":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2008_Impervious/wms'
-            layers = 'NLCD_2008_Impervious'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2008 tree canopy":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2008_Tree_Canopy/wms'
-            layers = 'NLCD_2008_Tree_Canopy'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2019 land cover":
             url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2019_Land_Cover_L48/wms?'
             layers = 'NLCD_2019_Land_Cover_L48'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2019 impervious":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2019_Impervious/wms'
-            layers = 'NLCD_2019_Impervious'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
-        elif NLCD.lower() == "2019 tree canopy":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2019_Tree_Canopy/wms'
-            layers = 'NLCD_2019_Tree_Canopy'
-            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         else:
-            print("Please enter a valid NLCD year.")
+            print("Please enter a valid NLCD layer name.")
 
 
     def add_swipe_control(self, layer1_url, layer2_url, swipe_position):
