@@ -503,7 +503,12 @@ class Map(ipyleaflet.Map):
             print("Please enter a valid NLCD year.")
 
 
-    def add_swipe_control(self, layer1_url, layer2_url, swipe_position):	        
+    def add_swipe_control(self, layer1_url, layer2_url, swipe_position):
+        '''Adds a swipe control to the map.
+        Args:
+            layer1_url (str): The URL of the first tile layer to swipe between.
+            layer2_url (str): The URL of the second tile layer to swipe between.
+            swipe_position (str): The position of the swipe control. Valid values are 'bottomleft', 'bottomright', 'topleft', and 'topright'.'''	        
         # Create the two layers to swipe between
         layer1 = ipyleaflet.TileLayer(url=layer1_url, name="Layer 1")
         layer2 = ipyleaflet.TileLayer(url=layer2_url, name="Layer 2")
