@@ -11,7 +11,7 @@
 -   Documentation: [https://hwilli72.github.io/maplab](https://hwilli72.github.io/maplab)
 -   GitHub: [https://github.com/hwilli72/maplab](https://github.com/hwilli72/maplab) 
 -   PyPI: [https://pypi.org/project/maplab/](https://pypi.org/project/maplab/)
--   YouTube tutorial:
+-   YouTube tutorial:[https://www.youtube.com/watch?v=9N_v5G9j6LE](https://www.youtube.com/watch?v=9N_v5G9j6LE)
     
 
 ## Introduction
