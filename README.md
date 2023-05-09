@@ -2,7 +2,6 @@
 
 
 [![image](https://img.shields.io/pypi/v/maplab.svg)](https://pypi.python.org/pypi/maplab)
-[![image](https://img.shields.io/conda/vn/conda-forge/maplab.svg)](https://anaconda.org/conda-forge/maplab)
 
 
 **A Python package for visualizing and manipulating geospatial data.**
@@ -21,6 +20,12 @@ Maplab is a Python package for visualizing and manipulating geospatial data. It 
 
 ## Key Features
 
+-   Create a map in a jupyter notebook with one line of code
+-   Load shapefiles, basemaps, raster data, and other types of vector data onto an interactive map
+-   Download geospatial data from the web
+-   Automate data cleaning operations that would otherwise be performed in excel to prepare geospatial data for mapping applications
+-   Create a split map with different layers on each side to compare change over time
+-   Add WMS land cover, tree cover, and impervious layers to a map   
 
 ## Credits
 

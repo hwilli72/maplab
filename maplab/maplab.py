@@ -407,6 +407,102 @@ class Map(ipyleaflet.Map):
 
         self.add_control(toolbar_ctrl)
 
+    def add_wms_layer(self, url, name, layers, format='image/png', transparent=True, attribution='', **kwargs):
+        """Adds a WMS layer to the map.
+        Args:
+            url (str): The URL of the WMS service.
+            name (str): The name of the layer.
+            layers (str): The layers of the WMS service.
+            format (str, optional): The format of the image. Defaults to 'image/png'.
+            transparent (bool, optional): Whether the image is transparent. Defaults to True.
+            attribution (str, optional): The attribution of the data. Defaults to ''.
+        """
+        import ipyleaflet
+        import requests
+        from ipyleaflet import WMSLayer
+
+        wms = ipyleaflet.WMSLayer(
+            url=url,
+            layers=layers,
+            format=format,
+            transparent=transparent,
+            attribution=attribution,
+            name=name, **kwargs
+        )
+        self.add_layer(wms)
+
+    def add_landcover(self, NLCD, **kwargs):
+        """Adds the NLCD to the map.
+        
+        Args:
+            self: The map.
+            NLCD (str): The NLCD to add.
+            kwargs: Keyword arguments to pass to the NLCD.
+        """
+        if NLCD.lower() == "2001 land cover":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2001_Land_Cover/wms'
+            layers = 'NLCD_2001_Land_Cover'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2001 impervious":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2001_Impervious/wms'
+            layers = 'NLCD_2001_Impervious'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2001 tree canopy":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2001_Tree_Canopy/wms'
+            layers = 'NLCD_2001_Tree_Canopy'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2004 land cover":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2004_Land_Cover/wms'
+            layers = 'NLCD_2004_Land_Cover'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2004 impervious":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2004_Impervious/wms'
+            layers = 'NLCD_2004_Impervious'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2004 tree canopy":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2004_Tree_Canopy/wms'
+            layers = 'NLCD_2004_Tree_Canopy'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2006 land cover":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2006_Land_Cover/wms'
+            layers = 'NLCD_2006_Land_Cover'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2006 impervious":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2006_Impervious/wms'
+            layers = 'NLCD_2006_Impervious'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2006 tree canopy":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2006_Tree_Canopy/wms'
+            layers = 'NLCD_2006_Tree_Canopy'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2008 land cover":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2008_Land_Cover/wms'
+            layers = 'NLCD_2008_Land_Cover'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2008 impervious":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2008_Impervious/wms'
+            layers = 'NLCD_2008_Impervious'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2008 tree canopy":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2008_Tree_Canopy/wms'
+            layers = 'NLCD_2008_Tree_Canopy'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2019 land cover":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2019_Land_Cover_L48/wms?'
+            layers = 'NLCD_2019_Land_Cover_L48'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2019 impervious":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2019_Impervious/wms'
+            layers = 'NLCD_2019_Impervious'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        elif NLCD.lower() == "2019 tree canopy":
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2019_Tree_Canopy/wms'
+            layers = 'NLCD_2019_Tree_Canopy'
+            self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
+        else:
+            print("Please enter a valid NLCD year.")
+
+
     def add_swipe_control(self, layer1_url, layer2_url, swipe_position):	        
         # Create the two layers to swipe between
         layer1 = ipyleaflet.TileLayer(url=layer1_url, name="Layer 1")
@@ -441,7 +537,6 @@ class Map(ipyleaflet.Map):
         self.on_interaction(on_mouse_up, 'mouseup')
 
         print("Swipe tool added to map")
-
 
 
 ##  Practice with functions

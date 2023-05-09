@@ -20,6 +20,12 @@ Maplab is a Python package for visualizing and manipulating geospatial data. It 
 
 ## Key Features
 
+-   Create a map in a jupyter notebook with one line of code
+-   Load shapefiles, basemaps, raster data, and other types of vector data onto an interactive map
+-   Download geospatial data from the web
+-   Automate data cleaning operations that would otherwise be performed in excel to prepare geospatial data for mapping applications
+-   Create a split map with different layers on each side to compare change over time
+-   Add WMS land cover, tree cover, and impervious layers to a map
 
 ## Credits
 
