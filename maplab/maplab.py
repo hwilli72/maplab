@@ -440,7 +440,7 @@ class Map(ipyleaflet.Map):
             kwargs: Keyword arguments to pass to the NLCD.
         """
         if NLCD.lower() == "2001 land cover":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2001_Land_Cover/wms'
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2001_Land_Cover_L48/wms?'
             layers = 'NLCD_2001_Land_Cover'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2001 impervious":
@@ -452,7 +452,7 @@ class Map(ipyleaflet.Map):
             layers = 'NLCD_2001_Tree_Canopy'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2004 land cover":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2004_Land_Cover/wms'
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2004_Land_Cover_L48/wms?'
             layers = 'NLCD_2004_Land_Cover'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2004 impervious":
@@ -464,7 +464,7 @@ class Map(ipyleaflet.Map):
             layers = 'NLCD_2004_Tree_Canopy'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2006 land cover":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2006_Land_Cover/wms'
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2006_Land_Cover_L48/wms?'
             layers = 'NLCD_2006_Land_Cover'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2006 impervious":
@@ -476,7 +476,7 @@ class Map(ipyleaflet.Map):
             layers = 'NLCD_2006_Tree_Canopy'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2008 land cover":
-            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2008_Land_Cover/wms'
+            url = 'https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2008_Land_Cover_L48/wms?'
             layers = 'NLCD_2008_Land_Cover'
             self.add_wms_layer(url, layers=layers, name=NLCD, **kwargs)
         elif NLCD.lower() == "2008 impervious":
