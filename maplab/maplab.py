@@ -7,7 +7,6 @@ import pandas
 import geopandas
 import openpyxl
 import folium
-import csv 
 
 class Map(ipyleaflet.Map):
     
