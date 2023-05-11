@@ -7,6 +7,7 @@ import pandas
 import geopandas
 import openpyxl
 import folium
+import csv 
 
 class Map(ipyleaflet.Map):
     
@@ -376,6 +377,19 @@ class Map(ipyleaflet.Map):
 
         basemap.observe(change_basemap, names='value')
 
+### Marker info
+        import ipyfilechooser
+
+        marker = ipyfilechooser.FileChooser('/Users/')
+
+        marker_ctrl = ipyleaflet.WidgetControl(widget=marker, position='topright')
+
+        def change_marker(change):
+            if change['new']:
+                self.add_points_from_csv(marker.selected)
+
+        marker.observe(change_marker, names='selected')
+
 ### Dropdown
 
         output = widgets.Output()
@@ -389,6 +403,11 @@ class Map(ipyleaflet.Map):
                 if b.icon == 'map':
                     if basemap_ctrl not in self.controls:
                         self.add_control(basemap_ctrl)
+                if b.icon == 'folder-open':
+                    if marker_ctrl not in self.controls:
+                        self.add_control(marker_ctrl)
+                    elif basemap_ctrl in self.controls:
+                        self.remove_control(basemap_ctrl)
         
         for i in range(rows):
             for j in range(cols):
@@ -502,6 +521,52 @@ class Map(ipyleaflet.Map):
         self.on_interaction(on_mouse_up, 'mouseup')
 
         print("Swipe tool added to map")
+    
+    def csv_to_shp(in_csv, out_shp, x='longitude', y='latitude'):
+        '''Converts a csv file to a shapefile.
+        Args:
+            in_csv (str): The input csv file.
+            out_shp (str): The output shapefile.
+            x (str, optional): The name of the x column. Defaults to 'longitude'.
+            y (str, optional): The name of the y column. Defaults to 'latitude'.'''
+        import pandas as pd
+        import geopandas as gpd
+        from shapely.geometry import Point
+        df = pd.read_csv(in_csv)
+        gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[x], df[y]))
+        gdf.to_file(out_shp)
+        print("Shapefile saved to " + out_shp)
+
+    def csv_to_geojson(in_csv, out_geojson, x='longitude', y='latitude'):
+        '''Converts a csv file to a geojson file.
+        Args:
+            in_csv (str): The input csv file.
+            out_geojson (str): The output geojson file.
+            x (str, optional): The name of the x column. Defaults to 'longitude'.
+            y (str, optional): The name of the y column. Defaults to 'latitude'.'''
+        import pandas as pd
+        import geopandas as gpd
+        from shapely.geometry import Point
+        df = pd.read_csv(in_csv)
+        gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[x], df[y]))
+        gdf.to_file(out_geojson, driver='GeoJSON')
+        print("GeoJSON saved to " + out_geojson)
+
+    def csv_to_markercluster(self, in_csv, x='longitude', y='latitude'):
+        '''Converts a csv file to a marker cluster layer and adds it to the map.
+        Args:
+            in_csv (str): The input csv file.
+            x (str, optional): The name of the x column. Defaults to 'longitude'.
+            y (str, optional): The name of the y column. Defaults to 'latitude'.'''
+        import pandas as pd
+        import geopandas as gpd
+        from shapely.geometry import Point
+        from ipyleaflet import MarkerCluster
+        df = pd.read_csv(in_csv)
+        gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[x], df[y]))
+        marker_cluster = MarkerCluster(markers=[ipyleaflet.Marker(location=[point.y, point.x]) for point in gdf['geometry'].tolist()])
+        self.add_layer(marker_cluster)
+        print("Marker cluster added to map")
 
 
 ##  Practice with functions

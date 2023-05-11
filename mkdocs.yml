@@ -54,6 +54,7 @@ nav:
         - examples/maplab.ipynb
         - examples/foliumap.ipynb
         - examples/widgets.ipynb
+        - examples/add_markers.ipynb
     - API Reference:
           - maplab module: maplab.md
           - folium module: foliumap.md
